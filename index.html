@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Surtecol — desarrollo web, automatizaciones y capacitaciones</title>
+<meta name="description" content="Sitios web, automatizaciones, chatbots de WhatsApp y capacitaciones en Excel, n8n, Power BI e IA para el trabajo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#FAF7F2;
+    --ink:#1A1A1A;
+    --ink-2:#3A3A34;
+    --muted:#6B6558;
+    --muted-2:#8A8474;
+    --line:#DDD5C7;
+    --terracotta:#C1622D;
+    --green:#2F6F4E;
+    --whatsapp:#22C35E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Work Sans',ui-sans-serif,sans-serif;}
+  a{color:inherit;text-decoration:none;}
+  h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
+  .wrap{max-width:1440px;margin:0 auto;}
+  section{padding-left:72px;padding-right:72px;box-sizing:border-box;}
+
+  /* topbar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:36px 72px;}
+  .logo{font-family:'Fraunces',serif;font-size:22px;font-weight:600;}
+  .topbar a{font-size:14px;font-weight:600;border-bottom:1.5px solid var(--ink);padding-bottom:2px;}
+  .topbar a:hover{opacity:0.6;}
+
+  /* hero */
+  .hero{display:flex;gap:80px;padding-top:40px;padding-bottom:100px;align-items:flex-end;}
+  .hero-copy{flex:1 1 0;display:flex;flex-direction:column;gap:24px;}
+  .eyebrow{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--terracotta);}
+  .hero h1{font-size:64px;line-height:1.05;font-weight:600;letter-spacing:-0.01em;max-width:640px;}
+  .hero p{margin:0;font-size:18px;line-height:1.55;color:var(--ink-2);max-width:460px;}
+  .hero-list{width:380px;display:flex;flex-direction:column;}
+  .hero-list-item{padding:20px 0;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);}
+  .hero-list-item:last-child{border-bottom:1px solid var(--line);}
+  .hero-list-item span:first-child{font-family:'Fraunces',serif;font-size:15px;font-weight:600;}
+  .hero-list-item span:last-child{font-size:13px;color:var(--muted-2);}
+
+  /* servicios */
+  .servicios{background:var(--ink);color:var(--paper);padding-top:72px;padding-bottom:72px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));}
+  .svc{padding:0 32px;border-right:1px solid var(--ink-2);display:flex;flex-direction:column;gap:14px;}
+  .svc:first-child{padding-left:0;}
+  .svc:last-child{border-right:none;padding-right:0;}
+  .svc span{font-size:13px;color:var(--muted-2);}
+  .svc h3{font-size:21px;font-weight:500;}
+  .svc p{margin:0;font-size:14px;line-height:1.55;color:#C9C4B6;}
+
+  /* capacitaciones */
+  .capacitaciones{padding-top:100px;padding-bottom:100px;display:flex;flex-direction:column;gap:40px;align-items:center;text-align:center;}
+  .capacitaciones h2{font-size:40px;font-weight:500;max-width:720px;line-height:1.15;}
+  .capacitaciones p{margin:0;font-size:17px;line-height:1.55;color:var(--ink-2);max-width:560px;}
+  .chips{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+  .chip{font-size:14px;font-weight:600;padding:10px 20px;border:1px solid var(--ink);border-radius:999px;}
+  .btn-plataforma{background:var(--green);color:var(--paper);font-weight:600;font-size:15px;padding:15px 28px;border-radius:999px;margin-top:8px;display:inline-block;}
+  .btn-plataforma:hover{opacity:0.9;}
+
+  /* proceso */
+  .proceso{padding-top:80px;padding-bottom:100px;}
+  .timeline{display:flex;align-items:flex-start;gap:0;position:relative;}
+  .timeline::before{content:"";position:absolute;left:0;right:0;top:8px;height:1px;background:var(--line);}
+  .step{flex:1 1 0;display:flex;flex-direction:column;gap:14px;padding:0 28px;}
+  .step:first-child{padding-left:0;}
+  .step:last-child{padding-right:0;}
+  .dot{width:16px;height:16px;border-radius:50%;background:var(--terracotta);z-index:1;}
+  .step h3{font-size:18px;font-weight:500;}
+  .step p{margin:0;font-size:14px;line-height:1.5;color:var(--muted);}
+
+  /* formulario */
+  .formulario{background:var(--terracotta);padding-top:96px;padding-bottom:96px;display:flex;justify-content:center;}
+  .form-card{background:var(--paper);border-radius:20px;padding:56px;max-width:720px;width:100%;display:flex;flex-direction:column;gap:24px;}
+  .form-card h2{font-size:30px;font-weight:500;}
+  .form-card > p{margin:0;font-size:15px;line-height:1.5;color:var(--muted);}
+  .field-row{display:flex;gap:14px;}
+  .field{flex:1 1 0;display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:13px;font-weight:600;color:var(--ink-2);}
+  .field input, .field select{border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:15px;font-family:inherit;background:#FFFFFF;}
+  .field input:focus, .field select:focus{outline:2px solid var(--green);outline-offset:1px;}
+  button[type="submit"]{background:var(--ink);color:var(--paper);font-weight:600;font-size:16px;padding:15px 24px;border:none;border-radius:8px;cursor:pointer;margin-top:4px;}
+  button[type="submit"]:disabled{opacity:0.6;cursor:default;}
+  .form-msg{font-size:14px;min-height:18px;}
+  .form-msg.ok{color:var(--green);}
+  .form-msg.err{color:#B3261E;}
+
+  /* footer */
+  footer{padding:40px 72px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted-2);flex-wrap:wrap;gap:10px;}
+
+  /* whatsapp flotante */
+  .whatsapp-float{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:var(--whatsapp);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,0.25);z-index:50;}
+  .whatsapp-float:hover{opacity:0.92;}
+
+  @media (max-width: 900px){
+    section{padding-left:24px;padding-right:24px;}
+    .topbar{padding:24px;}
+    .hero{flex-direction:column;gap:40px;align-items:stretch;padding-bottom:64px;}
+    .hero h1{font-size:40px;}
+    .hero-list{width:100%;}
+    .servicios{grid-template-columns:1fr 1fr;row-gap:32px;padding-top:48px;padding-bottom:48px;}
+    .svc{border-right:none;padding:0;border-top:1px solid var(--ink-2);padding-top:16px;}
+    .svc:nth-child(odd){padding-right:16px;}
+    .svc:nth-child(even){padding-left:16px;}
+    .capacitaciones{padding-top:64px;padding-bottom:64px;}
+    .capacitaciones h2{font-size:28px;}
+    .timeline{flex-direction:column;gap:28px;}
+    .timeline::before{display:none;}
+    .step{padding:0;}
+    .form-card{padding:32px;}
+    .field-row{flex-direction:column;}
+    footer{flex-direction:column;align-items:flex-start;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="logo">Surtecol</span>
+  <a href="https://wa.me/573188097131">318 809 7131 — escríbenos</a>
+</header>
+
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">Surtecol · servicios digitales</span>
+    <h1>Tecnología que trabaja mientras tú atiendes tu negocio.</h1>
+    <p>Sitios web, automatizaciones, chatbots y capacitaciones prácticas — pensados para negocios pequeños que no tienen tiempo que perder.</p>
+  </div>
+  <div class="hero-list">
+    <div class="hero-list-item"><span>Desarrollo web</span><span>01</span></div>
+    <div class="hero-list-item"><span>Automatizaciones</span><span>02</span></div>
+    <div class="hero-list-item"><span>Chatbots</span><span>03</span></div>
+    <div class="hero-list-item"><span>Capacitaciones</span><span>04</span></div>
+  </div>
+</section>
+
+<section class="servicios" id="servicios">
+  <div class="svc">
+    <span>01</span>
+    <h3>Desarrollo web</h3>
+    <p>Sitios y catálogos rápidos, responsivos y fáciles de mantener.</p>
+  </div>
+  <div class="svc">
+    <span>02</span>
+    <h3>Automatizaciones</h3>
+    <p>Flujos en n8n y Apps Script que eliminan trabajo manual repetitivo.</p>
+  </div>
+  <div class="svc">
+    <span>03</span>
+    <h3>Chatbots</h3>
+    <p>Asistentes de WhatsApp que agendan citas y atienden 24/7.</p>
+  </div>
+  <div class="svc">
+    <span>04</span>
+    <h3>Capacitaciones</h3>
+    <p>Excel, n8n, Power BI e IA para el trabajo, con plataforma propia.</p>
+  </div>
+</section>
+
+<section class="capacitaciones" id="capacitaciones">
+  <span class="eyebrow">Capacitaciones</span>
+  <h2>Aprende las herramientas que ya estás pagando en tu trabajo.</h2>
+  <p>Cursos cortos y prácticos, con material y seguimiento en nuestra propia plataforma virtual.</p>
+  <div class="chips">
+    <span class="chip">Excel avanzado</span>
+    <span class="chip">n8n desde cero</span>
+    <span class="chip">Power BI</span>
+    <span class="chip">IA para el trabajo</span>
+  </div>
+  <a class="btn-plataforma" href="https://campus.surtecol.online">Ir a la plataforma</a>
+</section>
+
+<section class="proceso">
+  <div class="timeline">
+    <div class="step">
+      <div class="dot"></div>
+      <h3>Diagnóstico</h3>
+      <p>Detectamos qué vale la pena automatizar primero.</p>
+    </div>
+    <div class="step">
+      <div class="dot"></div>
+      <h3>Construcción</h3>
+      <p>Diseñamos y probamos la solución contigo.</p>
+    </div>
+    <div class="step">
+      <div class="dot"></div>
+      <h3>Acompañamiento</h3>
+      <p>Te enseñamos a usarlo, sin dependencias eternas.</p>
+    </div>
+  </div>
+</section>
+
+<section class="formulario" id="formulario">
+  <form class="form-card" id="inscripcion-form">
+    <h2>Inscríbete o solicita información</h2>
+    <p>Te contactamos por WhatsApp o correo en menos de 24 horas.</p>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="nombre">Nombre completo</label>
+        <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" required>
+      </div>
+      <div class="field">
+        <label for="telefono">Teléfono / WhatsApp</label>
+        <input id="telefono" name="telefono" type="tel" placeholder="300 000 0000" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="correo">Correo electrónico</label>
+      <input id="correo" name="correo" type="email" placeholder="tucorreo@ejemplo.com" required>
+    </div>
+
+    <div class="field">
+      <label for="interes">Estoy interesado en</label>
+      <select id="interes" name="interes">
+        <option value="Desarrollo web">Desarrollo web</option>
+        <option value="Automatizaciones">Automatizaciones</option>
+        <option value="Chatbot">Chatbot</option>
+        <option value="Capacitación: Excel">Capacitación: Excel</option>
+        <option value="Capacitación: n8n">Capacitación: n8n</option>
+        <option value="Capacitación: Power BI">Capacitación: Power BI</option>
+        <option value="Capacitación: IA para el trabajo">Capacitación: IA para el trabajo</option>
+      </select>
+    </div>
+
+    <button type="submit">Enviar solicitud</button>
+    <div class="form-msg" id="form-msg" role="status" aria-live="polite"></div>
+  </form>
+</section>
+
+<footer>
+  <span>© 2026 Surtecol · surtecol.online</span>
+  <span>surtecol@gmail.com · 318 809 7131</span>
+</footer>
+
+<a class="whatsapp-float" href="https://wa.me/573188097131" aria-label="Escríbenos por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C6.48 2 2 6.48 2 12C2 13.85 2.5 15.58 3.38 17.06L2 22L7.09 20.65C8.51 21.5 10.19 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" fill="#FFFFFF"></path>
+    <path d="M9 8.5C9 8 9.4 7.6 9.9 7.6H10.6C10.9 7.6 11.2 7.8 11.3 8.1L11.9 9.7C12 10 11.9 10.3 11.7 10.5L11 11.1C11.5 12.2 12.4 13.1 13.5 13.6L14.1 12.9C14.3 12.7 14.6 12.6 14.9 12.7L16.5 13.3C16.8 13.4 17 13.7 17 14V14.7C17 15.2 16.6 15.6 16.1 15.6C12.7 15.6 9.9 12.9 9 8.5Z" fill="#22C35E"></path>
+  </svg>
+</a>
+
+<script>
+  // Pega aquí la URL de tu Web App de Apps Script (termina en /exec)
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbx_75T_wSFBpxFc7Ap-ddu-NleJPWhzzr2qKQWrY6jIqgxpQgK17NI7eo7DdkCaE-GGsg/exec';
+
+  var form = document.getElementById('inscripcion-form');
+  var msg = document.getElementById('form-msg');
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+
+    var btn = form.querySelector('button[type="submit"]');
+    var payload = {
+      nombre: form.nombre.value.trim(),
+      telefono: form.telefono.value.trim(),
+      correo: form.correo.value.trim(),
+      interes: form.interes.value
+    };
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    msg.textContent = '';
+    msg.className = 'form-msg';
+
+    fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.ok) {
+          msg.textContent = 'Gracias, recibimos tu solicitud. Te contactamos pronto.';
+          msg.className = 'form-msg ok';
+          form.reset();
+        } else {
+          msg.textContent = 'Hubo un error. Intenta de nuevo o escríbenos por WhatsApp.';
+          msg.className = 'form-msg err';
+        }
+      })
+      .catch(function () {
+        msg.textContent = 'Hubo un error. Intenta de nuevo o escríbenos por WhatsApp.';
+        msg.className = 'form-msg err';
+      })
+      .finally(function () {
+        btn.disabled = false;
+        btn.textContent = 'Enviar solicitud';
+      });
+  });
+</script>
+
+</body>
+</html>
