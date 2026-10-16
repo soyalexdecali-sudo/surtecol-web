@@ -3,204 +3,588 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Surtecol — desarrollo web, automatizaciones y capacitaciones</title>
-<meta name="description" content="Sitios web, automatizaciones, chatbots de WhatsApp y capacitaciones en Excel, n8n, Power BI e IA para el trabajo.">
+<title>Surtecol — Automatización y Tecnología para tu negocio</title>
+<meta name="description" content="Sitios web, automatizaciones, chatbots de WhatsApp y capacitaciones prácticas para negocios que quieren crecer.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
 <style>
-  :root{
-    --paper:#FAF7F2;
-    --ink:#1A1A1A;
-    --ink-2:#3A3A34;
-    --muted:#6B6558;
-    --muted-2:#8A8474;
-    --line:#DDD5C7;
-    --terracotta:#C1622D;
-    --green:#2F6F4E;
-    --whatsapp:#22C35E;
-  }
-  *{box-sizing:border-box;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Work Sans',ui-sans-serif,sans-serif;}
-  a{color:inherit;text-decoration:none;}
-  h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
-  .wrap{max-width:1440px;margin:0 auto;}
-  section{padding-left:72px;padding-right:72px;box-sizing:border-box;}
+/* ── tokens ─────────────────────────────────────────── */
+:root {
+  --bg:        #07091A;
+  --bg-2:      #0B0E1F;
+  --surface:   #10142A;
+  --surface-2: #161B35;
+  --border:    #1C2040;
+  --border-2:  #28304E;
+  --text:      #E8ECFF;
+  --text-2:    #7B87B0;
+  --text-3:    #3A425E;
+  --accent:    #3DFFC5;     /* electric mint */
+  --accent-2:  #FF5B4B;    /* coral */
+  --accent-3:  #7C5CFF;    /* purple glow */
+  --glow:      rgba(61,255,197,0.10);
+  --glow-h:    rgba(61,255,197,0.18);
+  --r:         12px;
+  --r-pill:    999px;
+  --font:      'Space Grotesk', system-ui, sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
 
-  /* topbar */
-  .topbar{display:flex;align-items:center;justify-content:space-between;padding:36px 72px;}
-  .logo{font-family:'Fraunces',serif;font-size:22px;font-weight:600;}
-  .topbar a{font-size:14px;font-weight:600;border-bottom:1.5px solid var(--ink);padding-bottom:2px;}
-  .topbar a:hover{opacity:0.6;}
+/* ── grid background ────────────────────────────────── */
+.grid-bg{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(61,255,197,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(61,255,197,0.04) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 75%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 75%,transparent 100%);
+}
 
-  /* hero */
-  .hero{display:flex;gap:80px;padding-top:40px;padding-bottom:100px;align-items:flex-end;}
-  .hero-copy{flex:1 1 0;display:flex;flex-direction:column;gap:24px;}
-  .eyebrow{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--terracotta);}
-  .hero h1{font-size:64px;line-height:1.05;font-weight:600;letter-spacing:-0.01em;max-width:640px;}
-  .hero p{margin:0;font-size:18px;line-height:1.55;color:var(--ink-2);max-width:460px;}
-  .hero-list{width:380px;display:flex;flex-direction:column;}
-  .hero-list-item{padding:20px 0;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);}
-  .hero-list-item:last-child{border-bottom:1px solid var(--line);}
-  .hero-list-item span:first-child{font-family:'Fraunces',serif;font-size:15px;font-weight:600;}
-  .hero-list-item span:last-child{font-size:13px;color:var(--muted-2);}
+/* ── nav ────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 64px;
+  background:rgba(7,9,26,0.75);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+  transition:padding .3s;
+}
+.nav-logo{
+  font-size:17px;font-weight:700;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:10px;
+}
+.nav-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 10px var(--accent);
+  animation:pulse-dot 2.4s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a{font-size:14px;font-weight:500;color:var(--text-2);transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.btn-nav{
+  background:var(--accent);color:#07091A;
+  font-size:13px;font-weight:700;padding:9px 22px;border-radius:var(--r-pill);
+  transition:opacity .2s,transform .2s;
+}
+.btn-nav:hover{opacity:.85;transform:translateY(-1px);}
 
-  /* servicios */
-  .servicios{background:var(--ink);color:var(--paper);padding-top:72px;padding-bottom:72px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));}
-  .svc{padding:0 32px;border-right:1px solid var(--ink-2);display:flex;flex-direction:column;gap:14px;}
-  .svc:first-child{padding-left:0;}
-  .svc:last-child{border-right:none;padding-right:0;}
-  .svc span{font-size:13px;color:var(--muted-2);}
-  .svc h3{font-size:21px;font-weight:500;}
-  .svc p{margin:0;font-size:14px;line-height:1.55;color:#C9C4B6;}
+/* ── hero ───────────────────────────────────────────── */
+.hero{
+  position:relative;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 24px 80px;overflow:hidden;
+}
+.hero>*{position:relative;z-index:1;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--border-2);background:var(--surface);
+  font-size:13px;font-weight:500;color:var(--text-2);
+  padding:6px 16px;border-radius:var(--r-pill);margin-bottom:36px;
+}
+.hero-badge .chip{
+  background:var(--accent);color:#07091A;
+  font-size:11px;font-weight:700;padding:2px 9px;border-radius:var(--r-pill);
+}
+.hero h1{
+  font-size:clamp(38px,7vw,80px);
+  font-weight:700;line-height:1.06;letter-spacing:-.03em;
+  max-width:860px;margin-bottom:24px;
+}
+.hero-cycle{
+  display:inline-block;color:var(--accent);
+  position:relative;
+  transition:opacity .25s,transform .25s;
+  text-shadow:0 0 40px rgba(61,255,197,.4);
+}
+.hero-cycle.fade{opacity:0;transform:translateY(8px);}
+.hero-sub{
+  font-size:clamp(16px,2vw,18px);line-height:1.6;
+  color:var(--text-2);max-width:520px;margin-bottom:40px;
+}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{
+  background:var(--accent);color:#07091A;
+  font-size:15px;font-weight:700;padding:14px 30px;border-radius:var(--r-pill);
+  display:inline-block;transition:transform .2s,box-shadow .2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(61,255,197,.28);}
+.btn-ghost{
+  font-size:15px;font-weight:600;padding:14px 30px;
+  border-radius:var(--r-pill);border:1px solid var(--border-2);
+  display:inline-block;transition:border-color .2s,background .2s;
+}
+.btn-ghost:hover{border-color:var(--accent);background:rgba(61,255,197,.06);}
+.hero-pills{
+  display:flex;gap:12px;margin-top:56px;justify-content:center;flex-wrap:wrap;
+}
+.hero-pill{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-pill);padding:12px 22px;
+  display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;
+  animation:float-pill 5s ease-in-out infinite;
+}
+.hero-pill:nth-child(2){animation-delay:-1.7s;}
+.hero-pill:nth-child(3){animation-delay:-3.4s;}
+.hero-pill .pi{font-size:18px;}
+@keyframes float-pill{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 
-  /* capacitaciones */
-  .capacitaciones{padding-top:100px;padding-bottom:100px;display:flex;flex-direction:column;gap:40px;align-items:center;text-align:center;}
-  .capacitaciones h2{font-size:40px;font-weight:500;max-width:720px;line-height:1.15;}
-  .capacitaciones p{margin:0;font-size:17px;line-height:1.55;color:var(--ink-2);max-width:560px;}
-  .chips{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
-  .chip{font-size:14px;font-weight:600;padding:10px 20px;border:1px solid var(--ink);border-radius:999px;}
-  .btn-plataforma{background:var(--green);color:var(--paper);font-weight:600;font-size:15px;padding:15px 28px;border-radius:999px;margin-top:8px;display:inline-block;}
-  .btn-plataforma:hover{opacity:0.9;}
+/* ── marquee ────────────────────────────────────────── */
+.marquee-wrap{
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--bg-2);overflow:hidden;padding:13px 0;user-select:none;
+}
+.marquee-track{display:flex;width:max-content;animation:run-marquee 22s linear infinite;}
+.marquee-wrap:hover .marquee-track{animation-play-state:paused;}
+.mq-item{
+  display:flex;align-items:center;gap:10px;padding:0 32px;
+  font-size:14px;font-weight:500;color:var(--text-2);white-space:nowrap;
+}
+.mq-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+@keyframes run-marquee{to{transform:translateX(-50%);}}
 
-  /* proceso */
-  .proceso{padding-top:80px;padding-bottom:100px;}
-  .timeline{display:flex;align-items:flex-start;gap:0;position:relative;}
-  .timeline::before{content:"";position:absolute;left:0;right:0;top:8px;height:1px;background:var(--line);}
-  .step{flex:1 1 0;display:flex;flex-direction:column;gap:14px;padding:0 28px;}
-  .step:first-child{padding-left:0;}
-  .step:last-child{padding-right:0;}
-  .dot{width:16px;height:16px;border-radius:50%;background:var(--terracotta);z-index:1;}
-  .step h3{font-size:18px;font-weight:500;}
-  .step p{margin:0;font-size:14px;line-height:1.5;color:var(--muted);}
+/* ── stats ──────────────────────────────────────────── */
+.stats-band{
+  background:var(--bg-2);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.stats-inner{
+  max-width:1160px;margin:0 auto;padding:0 64px;
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.stat-cell{
+  padding:48px 24px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.stat-cell:last-child{border-right:none;}
+.stat-n{
+  font-size:52px;font-weight:700;letter-spacing:-.04em;
+  color:var(--accent);line-height:1;margin-bottom:6px;
+}
+.stat-l{font-size:14px;color:var(--text-2);font-weight:500;}
 
-  /* formulario */
-  .formulario{background:var(--terracotta);padding-top:96px;padding-bottom:96px;display:flex;justify-content:center;}
-  .form-card{background:var(--paper);border-radius:20px;padding:56px;max-width:720px;width:100%;display:flex;flex-direction:column;gap:24px;}
-  .form-card h2{font-size:30px;font-weight:500;}
-  .form-card > p{margin:0;font-size:15px;line-height:1.5;color:var(--muted);}
-  .field-row{display:flex;gap:14px;}
-  .field{flex:1 1 0;display:flex;flex-direction:column;gap:6px;}
-  .field label{font-size:13px;font-weight:600;color:var(--ink-2);}
-  .field input, .field select{border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:15px;font-family:inherit;background:#FFFFFF;}
-  .field input:focus, .field select:focus{outline:2px solid var(--green);outline-offset:1px;}
-  button[type="submit"]{background:var(--ink);color:var(--paper);font-weight:600;font-size:16px;padding:15px 24px;border:none;border-radius:8px;cursor:pointer;margin-top:4px;}
-  button[type="submit"]:disabled{opacity:0.6;cursor:default;}
-  .form-msg{font-size:14px;min-height:18px;}
-  .form-msg.ok{color:var(--green);}
-  .form-msg.err{color:#B3261E;}
+/* ── common section ─────────────────────────────────── */
+.section{padding:96px 64px;max-width:1160px;margin:0 auto;}
+.sec-tag{
+  font-size:13px;font-weight:600;color:var(--accent);
+  letter-spacing:.05em;display:block;margin-bottom:14px;
+}
+.sec-h{
+  font-size:clamp(28px,4vw,46px);font-weight:700;
+  line-height:1.08;letter-spacing:-.025em;
+}
 
-  /* footer */
-  footer{padding:40px 72px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted-2);flex-wrap:wrap;gap:10px;}
+/* ── services ───────────────────────────────────────── */
+.svc-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:16px;margin-top:48px;
+}
+.svc-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:36px;
+  transition:border-color .3s,box-shadow .3s,transform .3s;
+  position:relative;overflow:hidden;
+}
+.svc-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-3));
+  transform:scaleX(0);transform-origin:left;transition:transform .4s;
+}
+.svc-card:hover{
+  border-color:var(--border-2);
+  box-shadow:0 20px 60px rgba(0,0,0,.35),0 0 0 1px var(--glow);
+  transform:translateY(-4px);
+}
+.svc-card:hover::after{transform:scaleX(1);}
+.svc-icon{
+  width:50px;height:50px;border-radius:13px;
+  background:var(--glow);display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:20px;
+}
+.svc-card h3{font-size:21px;font-weight:700;margin-bottom:10px;}
+.svc-card p{font-size:15px;line-height:1.6;color:var(--text-2);}
+.svc-features{margin-top:22px;display:flex;flex-direction:column;gap:9px;}
+.svc-features li{
+  list-style:none;display:flex;align-items:flex-start;gap:9px;
+  font-size:13px;color:var(--text-2);line-height:1.4;
+}
+.svc-features li::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0;margin-top:1px;}
 
-  /* whatsapp flotante */
-  .whatsapp-float{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:var(--whatsapp);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,0.25);z-index:50;}
-  .whatsapp-float:hover{opacity:0.92;}
+/* ── capacitaciones ─────────────────────────────────── */
+.caps-bg{background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.caps-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;gap:24px;}
+.courses-row{
+  display:flex;gap:14px;overflow-x:auto;padding-bottom:10px;
+  scrollbar-width:thin;scrollbar-color:var(--border-2) transparent;
+}
+.courses-row::-webkit-scrollbar{height:4px;}
+.courses-row::-webkit-scrollbar-track{background:transparent;}
+.courses-row::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:4px;}
+.course-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:26px 22px;min-width:210px;flex-shrink:0;
+  transition:border-color .3s,transform .3s;
+}
+.course-card:hover{border-color:var(--border-2);transform:translateY(-4px);}
+.course-icon{font-size:30px;margin-bottom:14px;}
+.course-card h4{font-size:16px;font-weight:700;margin-bottom:8px;}
+.course-card p{font-size:13px;color:var(--text-2);line-height:1.5;}
+.course-badge{
+  display:inline-block;margin-top:14px;
+  font-size:11px;font-weight:700;background:var(--glow);
+  color:var(--accent);padding:3px 12px;border-radius:var(--r-pill);
+}
 
-  @media (max-width: 900px){
-    section{padding-left:24px;padding-right:24px;}
-    .topbar{padding:24px;}
-    .hero{flex-direction:column;gap:40px;align-items:stretch;padding-bottom:64px;}
-    .hero h1{font-size:40px;}
-    .hero-list{width:100%;}
-    .servicios{grid-template-columns:1fr 1fr;row-gap:32px;padding-top:48px;padding-bottom:48px;}
-    .svc{border-right:none;padding:0;border-top:1px solid var(--ink-2);padding-top:16px;}
-    .svc:nth-child(odd){padding-right:16px;}
-    .svc:nth-child(even){padding-left:16px;}
-    .capacitaciones{padding-top:64px;padding-bottom:64px;}
-    .capacitaciones h2{font-size:28px;}
-    .timeline{flex-direction:column;gap:28px;}
-    .timeline::before{display:none;}
-    .step{padding:0;}
-    .form-card{padding:32px;}
-    .field-row{flex-direction:column;}
-    footer{flex-direction:column;align-items:flex-start;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{transition:none !important;}
-  }
+/* ── proceso ────────────────────────────────────────── */
+.steps-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);border-radius:16px;
+  overflow:hidden;margin-top:48px;
+}
+.step-cell{background:var(--bg);padding:40px 34px;}
+.step-cell.step-hi{background:var(--surface);}
+.step-num{
+  font-size:60px;font-weight:700;line-height:1;
+  color:var(--border-2);margin-bottom:16px;
+  font-variant-numeric:tabular-nums;
+}
+.step-cell.step-hi .step-num{color:rgba(61,255,197,.22);}
+.step-cell h3{font-size:20px;font-weight:700;margin-bottom:10px;}
+.step-cell p{font-size:14px;color:var(--text-2);line-height:1.65;}
+
+/* ── CTA band ───────────────────────────────────────── */
+.cta-band{padding:0 64px;}
+.cta-inner{
+  background:linear-gradient(135deg,var(--surface) 0%,#0E1428 100%);
+  border:1px solid var(--border);border-radius:20px;
+  text-align:center;padding:80px 48px;
+  position:relative;overflow:hidden;max-width:1160px;margin:0 auto;
+}
+.cta-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:700px;height:300px;pointer-events:none;
+  background:radial-gradient(ellipse,rgba(61,255,197,.07) 0%,transparent 70%);
+}
+.cta-inner h2{
+  font-size:clamp(26px,3.5vw,44px);font-weight:700;
+  letter-spacing:-.025em;max-width:580px;margin:0 auto 14px;
+  position:relative;z-index:1;
+}
+.cta-inner p{
+  color:var(--text-2);font-size:17px;margin-bottom:36px;
+  position:relative;z-index:1;
+}
+.cta-inner .flex-btns{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  position:relative;z-index:1;
+}
+
+/* ── form ───────────────────────────────────────────── */
+.form-section{background:var(--bg-2);border-top:1px solid var(--border);padding:96px 24px;}
+.form-inner{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:22px;}
+.form-inner h2{font-size:clamp(26px,3vw,38px);font-weight:700;letter-spacing:-.025em;}
+.form-inner>p{color:var(--text-2);font-size:15px;line-height:1.55;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:13px;font-weight:600;color:var(--text-2);}
+.field input,.field select{
+  background:var(--surface);border:1px solid var(--border-2);
+  border-radius:10px;padding:13px 16px;
+  font-size:15px;font-family:var(--font);color:var(--text);
+  transition:border-color .2s,box-shadow .2s;outline:none;
+  -webkit-appearance:none;appearance:none;
+}
+.field input:focus,.field select:focus{
+  border-color:var(--accent);box-shadow:0 0 0 3px rgba(61,255,197,.12);
+}
+.field input::placeholder{color:var(--text-3);}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237B87B0' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;}
+.field select option{background:var(--surface);}
+.field-row{display:flex;gap:14px;}
+.field-row .field{flex:1 1 0;}
+.btn-submit{
+  background:var(--accent);color:#07091A;
+  font-size:16px;font-weight:700;padding:15px 30px;
+  border-radius:var(--r-pill);border:none;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;align-self:flex-start;
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(61,255,197,.28);}
+.btn-submit:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none;}
+.form-msg{font-size:14px;min-height:18px;}
+.form-msg.ok{color:var(--accent);}
+.form-msg.err{color:var(--accent-2);}
+
+/* ── footer ─────────────────────────────────────────── */
+footer{
+  border-top:1px solid var(--border);padding:40px 64px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;font-size:14px;color:var(--text-2);
+}
+.foot-logo{font-weight:700;font-size:16px;color:var(--text);}
+.foot-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+
+/* ── WhatsApp float ──────────────────────────────────── */
+.wa{
+  position:fixed;bottom:24px;right:24px;z-index:200;
+  width:56px;height:56px;border-radius:50%;
+  background:#22C55E;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 28px rgba(34,197,94,.4);
+  transition:transform .2s;
+}
+.wa:hover{transform:scale(1.08);}
+
+/* ── scroll reveal ───────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.d1{transition-delay:.1s;}
+.reveal.d2{transition-delay:.2s;}
+.reveal.d3{transition-delay:.3s;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* ── responsive ──────────────────────────────────────── */
+@media(max-width:900px){
+  nav{padding:14px 20px;}
+  .nav-links>a{display:none;}
+  .section{padding:64px 20px;}
+  .svc-grid{grid-template-columns:1fr;}
+  .steps-grid{grid-template-columns:1fr;}
+  .stats-inner{grid-template-columns:1fr 1fr;padding:0 20px;}
+  .stat-cell{border-right:none;border-bottom:1px solid var(--border);padding:32px 16px;}
+  .stat-cell:last-child{border-bottom:none;}
+  .caps-head{flex-direction:column;align-items:flex-start;}
+  footer{padding:32px 20px;flex-direction:column;align-items:flex-start;}
+  .foot-right{align-items:flex-start;}
+  .cta-band{padding:0 20px;}
+  .cta-inner{padding:52px 24px;}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;}
+}
 </style>
 </head>
 <body>
 
-<header class="topbar">
-  <span class="logo">Surtecol</span>
-  <a href="https://wa.me/573188097131">318 809 7131 — escríbenos</a>
-</header>
+<!-- ─── NAV ─── -->
+<nav id="nav">
+  <div class="nav-logo"><div class="nav-dot"></div>Surtecol</div>
+  <div class="nav-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#capacitaciones">Capacitaciones</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#formulario" class="btn-nav">Contáctanos</a>
+  </div>
+</nav>
 
+<!-- ─── HERO ─── -->
 <section class="hero">
-  <div class="hero-copy">
-    <span class="eyebrow">Surtecol · servicios digitales</span>
-    <h1>Tecnología que trabaja mientras tú atiendes tu negocio.</h1>
-    <p>Sitios web, automatizaciones, chatbots y capacitaciones prácticas — pensados para negocios pequeños que no tienen tiempo que perder.</p>
+  <div class="grid-bg"></div>
+  <div class="hero-badge"><span class="chip">Cali, Colombia</span>Automatización &amp; Tecnología para negocios</div>
+  <h1>Tu negocio necesita tecnología que <span class="hero-cycle" id="cycle">trabaja</span></h1>
+  <p class="hero-sub">Sitios web, automatizaciones, chatbots de WhatsApp y capacitaciones pensados para negocios pequeños que quieren crecer sin complicarse.</p>
+  <div class="hero-ctas">
+    <a href="#formulario" class="btn-primary">Solicitar diagnóstico gratis</a>
+    <a href="https://wa.me/573188097131" class="btn-ghost">WhatsApp directo →</a>
   </div>
-  <div class="hero-list">
-    <div class="hero-list-item"><span>Desarrollo web</span><span>01</span></div>
-    <div class="hero-list-item"><span>Automatizaciones</span><span>02</span></div>
-    <div class="hero-list-item"><span>Chatbots</span><span>03</span></div>
-    <div class="hero-list-item"><span>Capacitaciones</span><span>04</span></div>
-  </div>
-</section>
-
-<section class="servicios" id="servicios">
-  <div class="svc">
-    <span>01</span>
-    <h3>Desarrollo web</h3>
-    <p>Sitios y catálogos rápidos, responsivos y fáciles de mantener.</p>
-  </div>
-  <div class="svc">
-    <span>02</span>
-    <h3>Automatizaciones</h3>
-    <p>Flujos en n8n y Apps Script que eliminan trabajo manual repetitivo.</p>
-  </div>
-  <div class="svc">
-    <span>03</span>
-    <h3>Chatbots</h3>
-    <p>Asistentes de WhatsApp que agendan citas y atienden 24/7.</p>
-  </div>
-  <div class="svc">
-    <span>04</span>
-    <h3>Capacitaciones</h3>
-    <p>Excel, n8n, Power BI e IA para el trabajo, con plataforma propia.</p>
+  <div class="hero-pills">
+    <div class="hero-pill reveal d1"><span class="pi">⚡</span>Flujos n8n</div>
+    <div class="hero-pill reveal d2"><span class="pi">🤖</span>Chatbots 24/7</div>
+    <div class="hero-pill reveal d3"><span class="pi">🎓</span>Cursos prácticos</div>
   </div>
 </section>
 
-<section class="capacitaciones" id="capacitaciones">
-  <span class="eyebrow">Capacitaciones</span>
-  <h2>Aprende las herramientas que ya estás pagando en tu trabajo.</h2>
-  <p>Cursos cortos y prácticos, con material y seguimiento en nuestra propia plataforma virtual.</p>
-  <div class="chips">
-    <span class="chip">Excel avanzado</span>
-    <span class="chip">n8n desde cero</span>
-    <span class="chip">Power BI</span>
-    <span class="chip">IA para el trabajo</span>
+<!-- ─── MARQUEE ─── -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="mq-item"><div class="mq-dot"></div>n8n Workflows</div>
+    <div class="mq-item"><div class="mq-dot"></div>WhatsApp Business API</div>
+    <div class="mq-item"><div class="mq-dot"></div>Google Apps Script</div>
+    <div class="mq-item"><div class="mq-dot"></div>Sitios en GitHub Pages</div>
+    <div class="mq-item"><div class="mq-dot"></div>Power BI</div>
+    <div class="mq-item"><div class="mq-dot"></div>Excel Avanzado</div>
+    <div class="mq-item"><div class="mq-dot"></div>IA para el trabajo</div>
+    <div class="mq-item"><div class="mq-dot"></div>Chatbots de agenda</div>
+    <div class="mq-item"><div class="mq-dot"></div>Agentes con IA</div>
+    <div class="mq-item"><div class="mq-dot"></div>Automatización de ventas</div>
+    <!-- duplicate for seamless loop -->
+    <div class="mq-item"><div class="mq-dot"></div>n8n Workflows</div>
+    <div class="mq-item"><div class="mq-dot"></div>WhatsApp Business API</div>
+    <div class="mq-item"><div class="mq-dot"></div>Google Apps Script</div>
+    <div class="mq-item"><div class="mq-dot"></div>Sitios en GitHub Pages</div>
+    <div class="mq-item"><div class="mq-dot"></div>Power BI</div>
+    <div class="mq-item"><div class="mq-dot"></div>Excel Avanzado</div>
+    <div class="mq-item"><div class="mq-dot"></div>IA para el trabajo</div>
+    <div class="mq-item"><div class="mq-dot"></div>Chatbots de agenda</div>
+    <div class="mq-item"><div class="mq-dot"></div>Agentes con IA</div>
+    <div class="mq-item"><div class="mq-dot"></div>Automatización de ventas</div>
   </div>
-  <a class="btn-plataforma" href="https://moodle-moodle.8jwsm6.easypanel.host/?redirect=0" target="_blank" rel="noopener">Ir a la plataforma</a>
-</section>
+</div>
 
-<section class="proceso">
-  <div class="timeline">
-    <div class="step">
-      <div class="dot"></div>
-      <h3>Diagnóstico</h3>
-      <p>Detectamos qué vale la pena automatizar primero.</p>
+<!-- ─── STATS ─── -->
+<div class="stats-band">
+  <div class="stats-inner">
+    <div class="stat-cell">
+      <div class="stat-n" data-target="30" data-suffix="+">0</div>
+      <div class="stat-l">Clientes atendidos</div>
     </div>
-    <div class="step">
-      <div class="dot"></div>
-      <h3>Construcción</h3>
-      <p>Diseñamos y probamos la solución contigo.</p>
+    <div class="stat-cell">
+      <div class="stat-n" data-target="60" data-suffix="+">0</div>
+      <div class="stat-l">Flujos automatizados</div>
     </div>
-    <div class="step">
-      <div class="dot"></div>
-      <h3>Acompañamiento</h3>
-      <p>Te enseñamos a usarlo, sin dependencias eternas.</p>
+    <div class="stat-cell">
+      <div class="stat-n" data-target="5" data-suffix="+">0</div>
+      <div class="stat-l">Años de experiencia</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-n" data-target="100" data-suffix="%">0</div>
+      <div class="stat-l">Proyectos entregados</div>
     </div>
   </div>
-</section>
+</div>
 
-<section class="formulario" id="formulario">
-  <form class="form-card" id="inscripcion-form">
-    <h2>Inscríbete o solicita información</h2>
-    <p>Te contactamos por WhatsApp o correo en menos de 24 horas.</p>
+<!-- ─── SERVICIOS ─── -->
+<div id="servicios">
+  <div class="section">
+    <span class="sec-tag">Servicios</span>
+    <h2 class="sec-h">Todo lo que tu negocio necesita para automatizar y crecer</h2>
+    <div class="svc-grid">
+
+      <div class="svc-card reveal">
+        <div class="svc-icon">🌐</div>
+        <h3>Desarrollo web</h3>
+        <p>Sitios rápidos, responsivos y fáciles de mantener, integrados directamente con tus herramientas de Google.</p>
+        <ul class="svc-features">
+          <li>Catálogos con formularios de pedido en línea</li>
+          <li>Landing pages optimizadas para conversión</li>
+          <li>Sistemas de registro y agendamiento</li>
+        </ul>
+      </div>
+
+      <div class="svc-card reveal d1">
+        <div class="svc-icon">⚡</div>
+        <h3>Automatizaciones</h3>
+        <p>Flujos en n8n y Google Apps Script que eliminan el trabajo manual repetitivo y conectan todas tus apps.</p>
+        <ul class="svc-features">
+          <li>Integración entre CRM, Sheets, correo y más</li>
+          <li>Notificaciones y alertas automáticas</li>
+          <li>Reportes y facturación sin intervención manual</li>
+        </ul>
+      </div>
+
+      <div class="svc-card reveal d2">
+        <div class="svc-icon">🤖</div>
+        <h3>Chatbots de WhatsApp</h3>
+        <p>Asistentes inteligentes que responden consultas, agendan citas y califican leads — sin que estés presente.</p>
+        <ul class="svc-features">
+          <li>Atención 24/7 con IA integrada</li>
+          <li>Agendamiento automático de citas</li>
+          <li>Captura y calificación de leads</li>
+        </ul>
+      </div>
+
+      <div class="svc-card reveal d3">
+        <div class="svc-icon">🎓</div>
+        <h3>Capacitaciones</h3>
+        <p>Cursos prácticos para que tú y tu equipo dominen las herramientas que ya están usando en el trabajo.</p>
+        <ul class="svc-features">
+          <li>Sesiones presenciales y virtuales en Cali</li>
+          <li>Material en plataforma Moodle propia</li>
+          <li>Seguimiento personalizado por alumno</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── CAPACITACIONES ─── -->
+<div id="capacitaciones" class="caps-bg">
+  <div class="section">
+    <div class="caps-head">
+      <div>
+        <span class="sec-tag">Capacitaciones</span>
+        <h2 class="sec-h">Aprende lo que ya estás pagando en tu trabajo</h2>
+      </div>
+      <a href="https://moodle-moodle.8jwsm6.easypanel.host/?redirect=0" target="_blank" rel="noopener"
+         class="btn-ghost" style="white-space:nowrap;flex-shrink:0;">Ir a la plataforma →</a>
+    </div>
+    <div class="courses-row">
+      <div class="course-card reveal">
+        <div class="course-icon">📊</div>
+        <h4>Excel Avanzado</h4>
+        <p>Tablas dinámicas, fórmulas complejas y dashboards para tomar mejores decisiones.</p>
+        <span class="course-badge">Disponible</span>
+      </div>
+      <div class="course-card reveal d1">
+        <div class="course-icon">⚡</div>
+        <h4>n8n desde cero</h4>
+        <p>Automatiza tus flujos sin código, desde lo básico hasta integraciones avanzadas.</p>
+        <span class="course-badge">Disponible</span>
+      </div>
+      <div class="course-card reveal d2">
+        <div class="course-icon">📈</div>
+        <h4>Power BI</h4>
+        <p>Transforma datos crudos en visualizaciones claras que convencen y ayudan a decidir.</p>
+        <span class="course-badge">Disponible</span>
+      </div>
+      <div class="course-card reveal d3">
+        <div class="course-icon">🤖</div>
+        <h4>IA para el trabajo</h4>
+        <p>Claude, ChatGPT, Gemini y más: produce el doble en la mitad del tiempo.</p>
+        <span class="course-badge">Disponible</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PROCESO ─── -->
+<div id="proceso">
+  <div class="section">
+    <span class="sec-tag">Cómo trabajamos</span>
+    <h2 class="sec-h">Tres pasos, sin complicaciones</h2>
+    <div class="steps-grid">
+      <div class="step-cell reveal">
+        <div class="step-num">01</div>
+        <h3>Diagnóstico</h3>
+        <p>Una llamada de 30 minutos para entender qué vale la pena automatizar primero y qué resultado puedes esperar.</p>
+      </div>
+      <div class="step-cell step-hi reveal d1">
+        <div class="step-num">02</div>
+        <h3>Construcción</h3>
+        <p>Diseñamos y probamos la solución contigo, con entregas parciales para que veas el avance desde el día uno.</p>
+      </div>
+      <div class="step-cell reveal d2">
+        <div class="step-num">03</div>
+        <h3>Acompañamiento</h3>
+        <p>Te enseñamos a usarlo y quedamos disponibles. Sin dependencias eternas ni letra pequeña.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CTA BAND ─── -->
+<div class="cta-band" style="padding-bottom:96px;">
+  <div class="cta-inner reveal">
+    <div class="cta-glow"></div>
+    <h2>¿Listo para que la tecnología trabaje por ti?</h2>
+    <p>Escríbenos hoy y agendamos una llamada de diagnóstico sin costo.</p>
+    <div class="flex-btns">
+      <a href="#formulario" class="btn-primary">Hablar con nosotros</a>
+      <a href="https://wa.me/573188097131" class="btn-ghost">WhatsApp directo →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FORMULARIO ─── -->
+<div id="formulario" class="form-section">
+  <form class="form-inner" id="contacto-form">
+    <div>
+      <span class="sec-tag">Contacto</span>
+      <h2>Cuéntanos qué necesitas</h2>
+    </div>
+    <p>Te respondemos por WhatsApp o correo en menos de 24 horas.</p>
 
     <div class="field-row">
       <div class="field">
@@ -219,84 +603,146 @@
     </div>
 
     <div class="field">
-      <label for="interes">Estoy interesado en</label>
+      <label for="interes">Me interesa</label>
       <select id="interes" name="interes">
         <option value="Desarrollo web">Desarrollo web</option>
-        <option value="Automatizaciones">Automatizaciones</option>
-        <option value="Chatbot">Chatbot</option>
-        <option value="Capacitación: Excel">Capacitación: Excel</option>
-        <option value="Capacitación: n8n">Capacitación: n8n</option>
+        <option value="Automatizaciones">Automatizaciones (n8n / Apps Script)</option>
+        <option value="Chatbot WhatsApp">Chatbot de WhatsApp</option>
+        <option value="Capacitación: Excel">Capacitación: Excel Avanzado</option>
+        <option value="Capacitación: n8n">Capacitación: n8n desde cero</option>
         <option value="Capacitación: Power BI">Capacitación: Power BI</option>
-        <option value="Capacitación: IA para el trabajo">Capacitación: IA para el trabajo</option>
+        <option value="Capacitación: IA">Capacitación: IA para el trabajo</option>
       </select>
     </div>
 
-    <button type="submit">Enviar solicitud</button>
+    <button type="submit" class="btn-submit">Enviar solicitud</button>
     <div class="form-msg" id="form-msg" role="status" aria-live="polite"></div>
   </form>
-</section>
+</div>
 
+<!-- ─── FOOTER ─── -->
 <footer>
-  <span>© 2026 Surtecol · surtecol.online</span>
-  <span>surtecol@gmail.com · 318 809 7131</span>
+  <div>
+    <div class="foot-logo">Surtecol</div>
+    <div style="margin-top:4px;font-size:13px;color:var(--text-3);">Automatización &amp; Tecnología · Cali, Colombia</div>
+  </div>
+  <div class="foot-right">
+    <span>surtecol@gmail.com</span>
+    <span>318 809 7131</span>
+    <span style="color:var(--text-3);font-size:12px;">© 2026 Surtecol</span>
+  </div>
 </footer>
 
-<a class="whatsapp-float" href="https://wa.me/573188097131" aria-label="Escríbenos por WhatsApp">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2C6.48 2 2 6.48 2 12C2 13.85 2.5 15.58 3.38 17.06L2 22L7.09 20.65C8.51 21.5 10.19 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" fill="#FFFFFF"></path>
-    <path d="M9 8.5C9 8 9.4 7.6 9.9 7.6H10.6C10.9 7.6 11.2 7.8 11.3 8.1L11.9 9.7C12 10 11.9 10.3 11.7 10.5L11 11.1C11.5 12.2 12.4 13.1 13.5 13.6L14.1 12.9C14.3 12.7 14.6 12.6 14.9 12.7L16.5 13.3C16.8 13.4 17 13.7 17 14V14.7C17 15.2 16.6 15.6 16.1 15.6C12.7 15.6 9.9 12.9 9 8.5Z" fill="#22C35E"></path>
+<!-- ─── WHATSAPP FLOAT ─── -->
+<a class="wa" href="https://wa.me/573188097131" aria-label="Escríbenos por WhatsApp" rel="noopener">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l5.09-1.35C8.51 21.5 10.19 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
+    <path fill="#22C55E" d="M9 8.5c0-.5.4-.9.9-.9h.7c.3 0 .6.2.7.5l.6 1.6c.1.3 0 .6-.2.8l-.7.6c.5 1.1 1.4 2 2.5 2.5l.6-.7c.2-.2.5-.3.8-.2l1.6.6c.3.1.5.4.5.7v.7c0 .5-.4.9-.9.9C12.7 15.6 9.9 12.9 9 8.5z"/>
   </svg>
 </a>
 
+<!-- ─── JS ─── -->
 <script>
-  // Pega aquí la URL de tu Web App de Apps Script (termina en /exec)
-  var GAS_URL = 'https://script.google.com/macros/s/AKfycbx_75T_wSFBpxFc7Ap-ddu-NleJPWhzzr2qKQWrY6jIqgxpQgK17NI7eo7DdkCaE-GGsg/exec';
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbx_75T_wSFBpxFc7Ap-ddu-NleJPWhzzr2qKQWrY6jIqgxpQgK17NI7eo7DdkCaE-GGsg/exec';
 
-  var form = document.getElementById('inscripcion-form');
-  var msg = document.getElementById('form-msg');
+/* ── cycling headline ── */
+var words = ['trabaja', 'automatiza', 'escala', 'crece'];
+var cycleEl = document.getElementById('cycle');
+var wi = 0;
+setInterval(function () {
+  cycleEl.classList.add('fade');
+  setTimeout(function () {
+    wi = (wi + 1) % words.length;
+    cycleEl.textContent = words[wi];
+    cycleEl.classList.remove('fade');
+  }, 280);
+}, 2600);
 
-  form.addEventListener('submit', function (ev) {
-    ev.preventDefault();
+/* ── nav shrink on scroll ── */
+var navEl = document.getElementById('nav');
+window.addEventListener('scroll', function () {
+  if (window.scrollY > 60) {
+    navEl.style.padding = '10px 64px';
+  } else {
+    navEl.style.padding = '18px 64px';
+  }
+}, { passive: true });
 
-    var btn = form.querySelector('button[type="submit"]');
-    var payload = {
-      nombre: form.nombre.value.trim(),
-      telefono: form.telefono.value.trim(),
-      correo: form.correo.value.trim(),
-      interes: form.interes.value
-    };
-
-    btn.disabled = true;
-    btn.textContent = 'Enviando…';
-    msg.textContent = '';
-    msg.className = 'form-msg';
-
-    fetch(GAS_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
-    })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (data && data.ok) {
-          msg.textContent = 'Gracias, recibimos tu solicitud. Te contactamos pronto.';
-          msg.className = 'form-msg ok';
-          form.reset();
-        } else {
-          msg.textContent = 'Hubo un error. Intenta de nuevo o escríbenos por WhatsApp.';
-          msg.className = 'form-msg err';
-        }
-      })
-      .catch(function () {
-        msg.textContent = 'Hubo un error. Intenta de nuevo o escríbenos por WhatsApp.';
-        msg.className = 'form-msg err';
-      })
-      .finally(function () {
-        btn.disabled = false;
-        btn.textContent = 'Enviar solicitud';
-      });
+/* ── scroll reveal ── */
+var revealObs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
   });
-</script>
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el); });
 
+/* ── animated counters ── */
+var counterObs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (!e.isIntersecting) return;
+    var el = e.target;
+    var target = parseInt(el.dataset.target, 10);
+    var suffix = el.dataset.suffix || '+';
+    var duration = 1400;
+    var step = 16;
+    var steps = Math.round(duration / step);
+    var inc = target / steps;
+    var current = 0;
+    var timer = setInterval(function () {
+      current = Math.min(current + inc, target);
+      el.textContent = Math.floor(current) + (current >= target ? suffix : '');
+      if (current >= target) clearInterval(timer);
+    }, step);
+    counterObs.unobserve(el);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-n').forEach(function (el) { counterObs.observe(el); });
+
+/* ── mobile nav padding fix ── */
+function fixNavPad() {
+  if (window.innerWidth <= 900) {
+    navEl.style.padding = '14px 20px';
+  }
+}
+window.addEventListener('resize', fixNavPad, { passive: true });
+fixNavPad();
+
+/* ── contact form ── */
+var form = document.getElementById('contacto-form');
+var msg  = document.getElementById('form-msg');
+form.addEventListener('submit', function (ev) {
+  ev.preventDefault();
+  var btn = form.querySelector('.btn-submit');
+  var payload = {
+    nombre:   form.nombre.value.trim(),
+    telefono: form.telefono.value.trim(),
+    correo:   form.correo.value.trim(),
+    interes:  form.interes.value
+  };
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  msg.textContent = ''; msg.className = 'form-msg';
+  fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (d) {
+    if (d && d.ok) {
+      msg.textContent = '¡Listo! Nos pondremos en contacto muy pronto.';
+      msg.className = 'form-msg ok';
+      form.reset();
+    } else {
+      msg.textContent = 'Hubo un error. Escríbenos directamente por WhatsApp.';
+      msg.className = 'form-msg err';
+    }
+  })
+  .catch(function () {
+    msg.textContent = 'Hubo un error. Escríbenos directamente por WhatsApp.';
+    msg.className = 'form-msg err';
+  })
+  .finally(function () { btn.disabled = false; btn.textContent = 'Enviar solicitud'; });
+});
+</script>
 </body>
 </html>
