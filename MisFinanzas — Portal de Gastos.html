@@ -1,0 +1,1003 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>MisFinanzas — Portal de Gastos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
+
+<style>
+/* ── Layout: app shell con sidebar en desktop, stack en mobile ── */
+:root {
+  --bg:        #07091A;
+  --bg-2:      #0B0E1F;
+  --surface:   #10142A;
+  --surface-2: #161B35;
+  --border:    #1C2040;
+  --border-2:  #28304E;
+  --text:      #E8ECFF;
+  --text-2:    #7B87B0;
+  --text-3:    #3A425E;
+  --accent:    #3DFFC5;
+  --accent-2:  #FF5B4B;
+  --accent-3:  #7C5CFF;
+  --glow:      rgba(61,255,197,0.10);
+  --glow-h:    rgba(61,255,197,0.18);
+  --r:         12px;
+  --r-pill:    999px;
+  --font:      'Space Grotesk', system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+/* light override */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg:      #F0F2FF;
+    --bg-2:    #E8EBFA;
+    --surface: #FFFFFF;
+    --surface-2: #F4F5FC;
+    --border:  #D1D5EF;
+    --border-2:#B8BDE0;
+    --text:    #0D1230;
+    --text-2:  #4A5280;
+    --text-3:  #A0A8C8;
+    --glow:    rgba(61,255,197,0.08);
+    --glow-h:  rgba(61,255,197,0.14);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg:      #F0F2FF;
+  --bg-2:    #E8EBFA;
+  --surface: #FFFFFF;
+  --surface-2: #F4F5FC;
+  --border:  #D1D5EF;
+  --border-2:#B8BDE0;
+  --text:    #0D1230;
+  --text-2:  #4A5280;
+  --text-3:  #A0A8C8;
+  --glow:    rgba(61,255,197,0.08);
+  --glow-h:  rgba(61,255,197,0.14);
+  color-scheme: light;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;font-family:inherit;}
+
+/* ── Grid bg decoration ─── */
+.grid-bg{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(61,255,197,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(61,255,197,0.03) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:linear-gradient(to bottom,black 0%,transparent 60%);
+  -webkit-mask-image:linear-gradient(to bottom,black 0%,transparent 60%);
+}
+
+/* ── Nav ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 40px;
+  background:rgba(7,9,26,0.80);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-size:16px;font-weight:700;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:10px;
+}
+.nav-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 10px var(--accent);
+  animation:pulse-dot 2.4s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-pill{
+  font-size:12px;font-weight:600;letter-spacing:.04em;
+  padding:5px 14px;border-radius:var(--r-pill);
+  border:1px solid var(--border-2);color:var(--text-2);
+}
+.btn-nav{
+  background:var(--accent);color:#07091A;
+  font-size:13px;font-weight:700;padding:9px 22px;border-radius:var(--r-pill);
+  border:none;transition:opacity .2s,transform .2s;
+}
+.btn-nav:hover{opacity:.85;transform:translateY(-1px);}
+
+/* ── Page wrapper (below nav) ─── */
+.page{
+  padding-top:80px;
+  min-height:100vh;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+/* ── Hero connect section ─── */
+.connect-hero{
+  position:relative;overflow:hidden;
+  padding:64px 0 40px;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;gap:20px;
+}
+.connect-hero>*{position:relative;z-index:1;}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--border-2);background:var(--surface);
+  font-size:12px;font-weight:600;color:var(--text-2);letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 14px;border-radius:var(--r-pill);
+}
+.connect-hero h1{
+  font-size:clamp(28px,4vw,48px);font-weight:700;
+  letter-spacing:-.03em;line-height:1.1;
+  max-width:600px;text-wrap:balance;
+}
+.connect-hero h1 em{
+  font-style:normal;color:var(--accent);
+  text-shadow:0 0 40px rgba(61,255,197,.35);
+}
+.connect-hero p{
+  font-size:15px;color:var(--text-2);
+  max-width:460px;line-height:1.65;
+}
+
+/* ── Google Connect card ─── */
+.connect-card{
+  background:var(--surface);
+  border:1px solid var(--border-2);
+  border-radius:20px;
+  padding:32px 36px;
+  max-width:520px;width:100%;
+  margin:8px auto 0;
+  display:flex;flex-direction:column;gap:20px;
+  box-shadow:0 0 60px rgba(61,255,197,0.06);
+}
+.connect-card-header{
+  display:flex;align-items:center;gap:14px;
+}
+.gmail-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:var(--surface-2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.gmail-icon svg{width:22px;height:22px;}
+.connect-card-header h2{font-size:17px;font-weight:700;letter-spacing:-.02em;}
+.connect-card-header p{font-size:13px;color:var(--text-2);margin-top:2px;}
+.connect-status{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;color:var(--text-2);
+  padding:10px 14px;border-radius:10px;
+  background:var(--surface-2);border:1px solid var(--border);
+}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--text-3);flex-shrink:0;
+}
+.status-dot.connected{background:var(--accent);box-shadow:0 0 6px var(--accent);}
+.btn-google{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--accent);color:#07091A;
+  font-size:15px;font-weight:700;
+  padding:14px 28px;border-radius:var(--r-pill);
+  border:none;
+  transition:transform .2s,box-shadow .2s;
+  width:100%;
+}
+.btn-google:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(61,255,197,.28);}
+.btn-google svg{width:20px;height:20px;flex-shrink:0;}
+.connect-note{
+  font-size:12px;color:var(--text-3);text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+
+/* ── Divider ─── */
+.divider{
+  border:none;border-top:1px solid var(--border);
+  margin:40px 0;
+}
+
+/* ── Section header ─── */
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;gap:12px;flex-wrap:wrap;
+}
+.section-title{
+  font-size:18px;font-weight:700;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title .tag{
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 10px;border-radius:var(--r-pill);
+  background:var(--glow);border:1px solid rgba(61,255,197,.2);
+  color:var(--accent);
+}
+.section-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn-sm{
+  font-size:12px;font-weight:600;
+  padding:7px 16px;border-radius:var(--r-pill);
+  border:1px solid var(--border-2);
+  background:var(--surface);color:var(--text-2);
+  display:inline-flex;align-items:center;gap:6px;
+  transition:border-color .2s,color .2s,background .2s;
+}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent);background:var(--glow);}
+.btn-sm.accent{
+  background:var(--accent);color:#07091A;border-color:var(--accent);
+}
+.btn-sm.accent:hover{opacity:.85;background:var(--accent);}
+
+/* ── Stats row ─── */
+.stats-row{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  margin-bottom:28px;
+}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px 20px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.stat-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);}
+.stat-value{font-size:26px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
+.stat-value.mint{color:var(--accent);}
+.stat-value.coral{color:var(--accent-2);}
+.stat-sub{font-size:12px;color:var(--text-3);}
+
+/* ── Invoice upload zone ─── */
+.upload-zone{
+  border:2px dashed var(--border-2);border-radius:var(--r);
+  padding:32px 24px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color .2s,background .2s;
+  margin-bottom:28px;
+  position:relative;
+}
+.upload-zone:hover,.upload-zone.drag{
+  border-color:var(--accent);background:var(--glow);
+}
+.upload-zone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.upload-icon{
+  width:48px;height:48px;border-radius:14px;
+  background:var(--surface-2);border:1px solid var(--border-2);
+  display:flex;align-items:center;justify-content:center;
+}
+.upload-icon svg{width:22px;height:22px;color:var(--accent);}
+.upload-title{font-size:15px;font-weight:600;}
+.upload-desc{font-size:13px;color:var(--text-2);}
+.upload-types{
+  font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-3);
+}
+.upload-progress{
+  width:100%;max-width:280px;
+  height:3px;border-radius:var(--r-pill);
+  background:var(--border);overflow:hidden;
+  display:none;
+}
+.upload-progress-bar{
+  height:100%;border-radius:var(--r-pill);
+  background:var(--accent);width:0%;
+  transition:width .4s ease;
+}
+
+/* ── Table ─── */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);}
+table{
+  width:100%;border-collapse:collapse;
+  font-size:13px;min-width:600px;
+}
+thead tr{background:var(--surface-2);}
+thead th{
+  padding:12px 16px;text-align:left;
+  font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-3);white-space:nowrap;
+}
+tbody tr{
+  border-top:1px solid var(--border);
+  transition:background .15s;
+}
+tbody tr:hover{background:var(--surface);}
+tbody td{padding:13px 16px;color:var(--text);font-variant-numeric:tabular-nums;}
+tbody td.muted{color:var(--text-2);}
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:600;letter-spacing:.03em;
+  padding:3px 10px;border-radius:var(--r-pill);
+}
+.badge.ok{background:rgba(61,255,197,.12);color:var(--accent);}
+.badge.pending{background:rgba(255,91,75,.12);color:var(--accent-2);}
+.badge.gray{background:var(--surface-2);color:var(--text-2);}
+.empty-state{
+  padding:48px 24px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  color:var(--text-2);
+}
+.empty-state svg{opacity:.35;width:40px;height:40px;}
+.empty-state p{font-size:14px;}
+
+/* ── AI Query box ─── */
+.query-section{margin-top:40px;margin-bottom:48px;}
+.query-box{
+  background:var(--surface);border:1px solid var(--border-2);
+  border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:14px;
+  box-shadow:0 0 40px rgba(61,255,197,0.05);
+}
+.query-label{
+  font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-3);
+  display:flex;align-items:center;gap:6px;
+}
+.query-label::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--accent-3);box-shadow:0 0 6px var(--accent-3);
+  display:inline-block;
+}
+.query-row{display:flex;gap:10px;align-items:flex-end;}
+.query-input{
+  flex:1;min-width:0;
+  background:var(--surface-2);
+  border:1px solid var(--border-2);border-radius:12px;
+  padding:13px 16px;
+  font-family:var(--font);font-size:14px;color:var(--text);
+  resize:none;min-height:48px;max-height:140px;
+  line-height:1.5;
+  transition:border-color .2s;
+  overflow:hidden;
+}
+.query-input::placeholder{color:var(--text-3);}
+.query-input:focus{outline:none;border-color:var(--accent);}
+.btn-send{
+  flex-shrink:0;
+  background:var(--accent);color:#07091A;
+  border:none;border-radius:12px;
+  padding:13px 20px;
+  font-size:14px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+  transition:transform .2s,box-shadow .2s;
+}
+.btn-send:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(61,255,197,.28);}
+.btn-send:disabled{opacity:.5;pointer-events:none;}
+.query-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{
+  font-size:12px;font-weight:500;
+  padding:6px 14px;border-radius:var(--r-pill);
+  border:1px solid var(--border-2);color:var(--text-2);
+  background:var(--surface-2);
+  cursor:pointer;transition:border-color .2s,color .2s;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── AI response area ─── */
+.query-response{
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;
+  font-size:14px;line-height:1.7;color:var(--text-2);
+  display:none;position:relative;
+}
+.query-response.visible{display:block;}
+.response-header{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:10px;
+}
+.response-header::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--accent-3);display:inline-block;
+}
+.typing-dots{display:inline-flex;gap:3px;align-items:center;margin-left:2px;}
+.typing-dots span{
+  width:5px;height:5px;border-radius:50%;background:var(--text-3);
+  animation:bounce 1.2s ease-in-out infinite;
+}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+/* ── Telegram alt section ─── */
+.telegram-band{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:20px 24px;margin-top:20px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.telegram-band .tg-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(37,211,102,.12);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.telegram-band .tg-icon svg{width:22px;height:22px;}
+.tg-text h3{font-size:15px;font-weight:700;margin-bottom:2px;}
+.tg-text p{font-size:13px;color:var(--text-2);}
+.tg-text p a{color:var(--accent);font-weight:600;}
+.btn-tg{
+  margin-left:auto;
+  background:rgba(37,211,102,.15);color:#25D366;
+  border:1px solid rgba(37,211,102,.25);
+  font-size:13px;font-weight:700;
+  padding:9px 20px;border-radius:var(--r-pill);
+  white-space:nowrap;
+  transition:background .2s;
+}
+.btn-tg:hover{background:rgba(37,211,102,.25);}
+
+/* ── Footer ─── */
+footer{
+  border-top:1px solid var(--border);
+  padding:24px 0;margin-top:48px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-logo{font-size:14px;font-weight:700;letter-spacing:-.02em;}
+.footer-logo span{color:var(--accent);}
+.footer-copy{font-size:12px;color:var(--text-3);}
+.footer-links{display:flex;gap:20px;}
+.footer-links a{font-size:12px;color:var(--text-3);transition:color .2s;}
+.footer-links a:hover{color:var(--text-2);}
+
+/* ── Toast notification ─── */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:200;
+  background:var(--surface);border:1px solid var(--border-2);
+  border-radius:12px;padding:14px 18px;
+  font-size:13px;font-weight:500;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+  transform:translateY(80px);opacity:0;
+  transition:transform .3s,opacity .3s;
+  max-width:300px;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast .t-icon{width:18px;height:18px;flex-shrink:0;}
+.toast.success .t-icon{color:var(--accent);}
+.toast.error .t-icon{color:var(--accent-2);}
+
+/* ── Responsive ─── */
+@media(max-width:720px){
+  nav{padding:14px 20px;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .stats-row .stat-card:last-child{grid-column:span 2;}
+  .btn-google span{display:none;}
+}
+@media(max-width:480px){
+  .connect-card{padding:22px 18px;}
+  .section-header{flex-direction:column;align-items:flex-start;}
+  .stats-row{grid-template-columns:1fr;}
+  .stats-row .stat-card:last-child{grid-column:span 1;}
+  .query-row{flex-direction:column;}
+  .btn-send{width:100%;justify-content:center;}
+  .telegram-band{flex-direction:column;text-align:center;}
+  .btn-tg{margin-left:0;width:100%;text-align:center;}
+  footer{flex-direction:column;text-align:center;}
+  .footer-links{justify-content:center;}
+}
+</style>
+
+<!-- Grid bg -->
+<div class="grid-bg" aria-hidden="true"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-dot"></div>
+    MisFinanzas
+  </div>
+  <div class="nav-right">
+    <a href="https://surtecol.online" class="nav-pill">← Surtecol</a>
+    <a href="https://t.me/AsisFinanciero_bot" target="_blank" rel="noopener" class="btn-nav" style="background:none;border:1px solid var(--border-2);color:var(--text-2);">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:inline;margin-right:5px;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      Telegram
+    </a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- Hero -->
+  <section class="connect-hero">
+    <div class="hero-eyebrow">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="var(--accent)" opacity=".2"/><circle cx="6" cy="6" r="3" fill="var(--accent)"/></svg>
+      Portal de clientes
+    </div>
+    <h1>Tu historial de gastos,<br><em>siempre al día</em></h1>
+    <p>Conecta tu Gmail y sube tus facturas. El asistente escanea, organiza y responde tus preguntas sobre gastos en segundos.</p>
+  </section>
+
+  <!-- Connect card -->
+  <div class="connect-card" id="connectCard">
+    <div class="connect-card-header">
+      <div class="gmail-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 18V9.5L12 13.5L18 9.5V18H6Z" fill="var(--accent-2)"/>
+          <path d="M6 6H18L12 10.5L6 6Z" fill="var(--accent-2)" opacity=".7"/>
+          <rect x="4" y="4" width="16" height="16" rx="2" stroke="var(--border-2)" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div>
+        <h2>Conectar Gmail</h2>
+        <p>Escaneo automático de facturas en tu bandeja</p>
+      </div>
+    </div>
+
+    <div class="connect-status" id="connectStatus">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">No conectado — haz clic en el botón para vincular tu cuenta</span>
+    </div>
+
+    <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=583588443992-mporehifjibas6r37b2hmkm155gifrcc.apps.googleusercontent.com&redirect_uri=https://n8n-n8n.8jwsm6.easypanel.host/webhook/oauth-callback&response_type=code&scope=https://www.googleapis.com/auth/gmail.readonly email&access_type=offline&prompt=consent"
+       class="btn-google" id="btnGoogle">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      <span>Conectar con Google</span>
+    </a>
+
+    <div class="connect-note">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1a5 5 0 1 0 0 10A5 5 0 0 0 6 1zm0 2.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5zm0 2.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5z" fill="currentColor" opacity=".5"/></svg>
+      Solo lectura · No se enviarán correos ni se modificará nada
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Total del mes</div>
+      <div class="stat-value mint" id="statTotal">$0</div>
+      <div class="stat-sub" id="statMonth">Octubre 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Facturas</div>
+      <div class="stat-value" id="statCount">0</div>
+      <div class="stat-sub">registradas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Mayor gasto</div>
+      <div class="stat-value coral" id="statMax">$0</div>
+      <div class="stat-sub" id="statMaxCat">—</div>
+    </div>
+  </div>
+
+  <!-- Upload -->
+  <div class="section-header">
+    <div class="section-title">
+      Subir facturas
+      <span class="tag">Manual</span>
+    </div>
+  </div>
+
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" accept="image/*,.pdf" multiple id="fileInput" aria-label="Seleccionar facturas">
+    <div class="upload-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+    </div>
+    <div class="upload-title">Arrastra tus facturas aquí</div>
+    <div class="upload-desc">o haz clic para seleccionar archivos</div>
+    <div class="upload-types">JPG · PNG · PDF · hasta 10 MB por archivo</div>
+    <div class="upload-progress" id="uploadProgress">
+      <div class="upload-progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <!-- Invoices table -->
+  <div class="section-header">
+    <div class="section-title">
+      Facturas registradas
+      <span class="tag" id="tableCount">0</span>
+    </div>
+    <div class="section-actions">
+      <button class="btn-sm" onclick="exportCSV()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 8.5V10h10V8.5M6 1v7M3.5 5.5L6 8l2.5-2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Exportar CSV
+      </button>
+      <button class="btn-sm accent" onclick="refreshData()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10.5 2A5 5 0 1 0 9 9.5M10.5 2v3h-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+
+  <div class="table-wrap" id="tableWrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Proveedor</th>
+          <th>Categoría</th>
+          <th>Monto</th>
+          <th>Moneda</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id="invoiceBody">
+        <tr>
+          <td colspan="6">
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <p>Aún no hay facturas · Conecta tu Gmail o sube un archivo para comenzar</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AI Query -->
+  <div class="query-section">
+    <hr class="divider" style="margin-top:0;">
+    <div class="section-header">
+      <div class="section-title">
+        Asistente de gastos
+        <span class="tag">IA</span>
+      </div>
+    </div>
+
+    <div class="query-box">
+      <div class="query-label">Pregúntale a tu asistente</div>
+
+      <div class="query-chips" id="chips">
+        <button class="chip" onclick="setQuery('¿Cuánto gasté este mes?')">¿Cuánto gasté este mes?</button>
+        <button class="chip" onclick="setQuery('¿Cuál es mi mayor gasto?')">¿Cuál es mi mayor gasto?</button>
+        <button class="chip" onclick="setQuery('Muéstrame los gastos de alimentación')">Gastos de alimentación</button>
+        <button class="chip" onclick="setQuery('¿Cuánto llevo gastado esta semana?')">Esta semana</button>
+      </div>
+
+      <div class="query-row">
+        <textarea
+          class="query-input"
+          id="queryInput"
+          placeholder="Escribe tu pregunta, ej: ¿cuánto gasté en transporte este mes?"
+          rows="1"
+          aria-label="Pregunta al asistente"
+        ></textarea>
+        <button class="btn-send" id="btnSend" onclick="sendQuery()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M15 1L7 9M15 1L10 15L7 9M15 1L1 6L7 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Enviar
+        </button>
+      </div>
+
+      <div class="query-response" id="queryResponse">
+        <div class="response-header">
+          Asistente MisFinanzas
+        </div>
+        <div id="responseText"></div>
+      </div>
+    </div>
+
+    <!-- Telegram alt -->
+    <div class="telegram-band">
+      <div class="tg-icon">
+        <svg viewBox="0 0 24 24" fill="#25D366" width="22" height="22"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </div>
+      <div class="tg-text">
+        <h3>También disponible en Telegram</h3>
+        <p>Envía fotos de facturas o escribe tus consultas desde tu celular con <a href="https://t.me/AsisFinanciero_bot" target="_blank" rel="noopener">@AsisFinanciero_bot</a></p>
+      </div>
+      <a href="https://t.me/AsisFinanciero_bot" target="_blank" rel="noopener" class="btn-tg">Abrir Telegram</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">Mis<span>Finanzas</span> · by Surtecol</div>
+    <div class="footer-links">
+      <a href="https://surtecol.online">Surtecol.online</a>
+      <a href="https://t.me/AsisFinanciero_bot" target="_blank" rel="noopener">Telegram</a>
+    </div>
+    <div class="footer-copy">© 2026 · Cali, Colombia</div>
+  </footer>
+
+</div><!-- /.page -->
+
+<!-- Toast -->
+<div class="toast" id="toast" role="alert" aria-live="polite">
+  <svg class="t-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="8" cy="8" r="7"/>
+    <path d="M5 8l2 2 4-4"/>
+  </svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+/* ──────────────────────────────────────
+   Config – cambia N8N_QUERY_WEBHOOK cuando lo tengas listo
+   ────────────────────────────────────── */
+const N8N_QUERY_WEBHOOK = 'https://n8n-n8n.8jwsm6.easypanel.host/webhook/misfinanzas-query';
+const N8N_UPLOAD_WEBHOOK = 'https://n8n-n8n.8jwsm6.easypanel.host/webhook/misfinanzas-upload';
+
+/* ── Sample data (demo) ── */
+const SAMPLE_INVOICES = [
+  { fecha:'2026-10-25', proveedor:'Éxito Unicentro', categoria:'Alimentación', monto:187500, moneda:'COP', estado:'ok' },
+  { fecha:'2026-10-22', proveedor:'Uber', categoria:'Transporte', monto:28000, moneda:'COP', estado:'ok' },
+  { fecha:'2026-10-20', proveedor:'Netflix', categoria:'Entretenimiento', monto:17900, moneda:'COP', estado:'ok' },
+  { fecha:'2026-10-18', proveedor:'Farmacia Cruz Verde', categoria:'Salud', monto:56200, moneda:'COP', estado:'ok' },
+  { fecha:'2026-10-15', proveedor:'EPM', categoria:'Servicios públicos', monto:142000, moneda:'COP', estado:'ok' },
+];
+let invoices = [];
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', () => {
+  checkConnection();
+  // For demo: load sample data to show how it looks
+  // In production: fetch from n8n
+  loadInvoices(SAMPLE_INVOICES);
+  setupTextarea();
+  setupUploadZone();
+});
+
+/* ── Connection check (reads URL param from OAuth redirect) ── */
+function checkConnection() {
+  // n8n OAuth flow completes at n8n; user lands here after success
+  // We check localStorage for remembered connection state
+  try {
+    const conn = localStorage.getItem('mf_connected');
+    const email = localStorage.getItem('mf_email');
+    if (conn === '1' && email) {
+      setConnected(email);
+    }
+  } catch(e) {}
+
+  // Also handle a ?connected=1&email=... param (optional post-OAuth redirect)
+  const params = new URLSearchParams(location.search);
+  if (params.get('connected') === '1' || params.get('status') === 'ok') {
+    const email = params.get('email') || '';
+    setConnected(email);
+    try {
+      localStorage.setItem('mf_connected', '1');
+      if (email) localStorage.setItem('mf_email', email);
+    } catch(e) {}
+    // Clean URL
+    history.replaceState({}, '', location.pathname);
+  }
+}
+
+function setConnected(email) {
+  document.getElementById('statusDot').classList.add('connected');
+  document.getElementById('statusText').textContent = email
+    ? `✓ Conectado como ${email}`
+    : '✓ Gmail conectado';
+  const btn = document.getElementById('btnGoogle');
+  btn.style.opacity = '.5';
+  btn.style.pointerEvents = 'none';
+  btn.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px"><circle cx="8" cy="8" r="7"/><path d="M5 8l2 2 4-4"/></svg><span>Gmail conectado</span>';
+  btn.style.background = 'var(--surface-2)';
+  btn.style.color = 'var(--accent)';
+  btn.style.border = '1px solid rgba(61,255,197,.25)';
+}
+
+/* ── Load invoices ── */
+function loadInvoices(data) {
+  invoices = data || [];
+  renderTable();
+  updateStats();
+}
+
+function renderTable() {
+  const body = document.getElementById('invoiceBody');
+  document.getElementById('tableCount').textContent = invoices.length;
+
+  if (!invoices.length) {
+    body.innerHTML = `<tr><td colspan="6"><div class="empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <p>Aún no hay facturas · Conecta tu Gmail o sube un archivo para comenzar</p>
+    </div></td></tr>`;
+    return;
+  }
+
+  body.innerHTML = invoices.map(r => {
+    const fecha = r.fecha ? r.fecha.slice(0,10) : '—';
+    const monto = typeof r.monto === 'number'
+      ? r.monto.toLocaleString('es-CO', {style:'currency',currency:'COP',maximumFractionDigits:0})
+      : r.monto;
+    const badge = r.estado === 'ok'
+      ? '<span class="badge ok">✓ Procesado</span>'
+      : '<span class="badge pending">Pendiente</span>';
+    return `<tr>
+      <td class="muted">${fecha}</td>
+      <td>${r.proveedor||'—'}</td>
+      <td class="muted">${r.categoria||'—'}</td>
+      <td><strong>${monto}</strong></td>
+      <td class="muted">${r.moneda||'COP'}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+}
+
+function updateStats() {
+  if (!invoices.length) return;
+  const total = invoices.reduce((s,r)=>s+(r.monto||0),0);
+  const max = invoices.reduce((a,b)=>(b.monto||0)>(a.monto||0)?b:a,invoices[0]);
+  document.getElementById('statTotal').textContent =
+    total.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+  document.getElementById('statCount').textContent = invoices.length;
+  document.getElementById('statMax').textContent =
+    (max.monto||0).toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+  document.getElementById('statMaxCat').textContent = max.categoria || max.proveedor || '—';
+}
+
+/* ── Refresh ── */
+async function refreshData() {
+  showToast('Actualizando datos…', false);
+  try {
+    const res = await fetch(N8N_QUERY_WEBHOOK, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'list_invoices'})
+    });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    loadInvoices(data.invoices || data);
+    showToast('Datos actualizados ✓', true);
+  } catch(e) {
+    showToast('No se pudo conectar con el servidor', false, true);
+  }
+}
+
+/* ── Export CSV ── */
+function exportCSV() {
+  if (!invoices.length) { showToast('No hay datos para exportar', false, true); return; }
+  const headers = ['Fecha','Proveedor','Categoría','Monto','Moneda','Estado'];
+  const rows = invoices.map(r =>
+    [r.fecha,r.proveedor,r.categoria,r.monto,r.moneda,r.estado].join(',')
+  );
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'misfinanzas_gastos.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV descargado ✓', true);
+}
+
+/* ── Upload zone ── */
+function setupUploadZone() {
+  const zone = document.getElementById('uploadZone');
+  const input = document.getElementById('fileInput');
+
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag');
+    handleFiles(e.dataTransfer.files);
+  });
+  input.addEventListener('change', () => handleFiles(input.files));
+}
+
+async function handleFiles(files) {
+  if (!files.length) return;
+  const progress = document.getElementById('uploadProgress');
+  const bar = document.getElementById('progressBar');
+  progress.style.display = 'block';
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    bar.style.width = Math.round(((i+0.5)/files.length)*100) + '%';
+
+    // Convert to base64 for n8n
+    const b64 = await fileToBase64(file);
+    try {
+      const res = await fetch(N8N_UPLOAD_WEBHOOK, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          filename: file.name,
+          mimetype: file.type,
+          data: b64
+        })
+      });
+      if (!res.ok) throw new Error(res.status);
+    } catch(e) {
+      // Will show error at end
+    }
+    bar.style.width = Math.round(((i+1)/files.length)*100) + '%';
+  }
+
+  setTimeout(() => {
+    progress.style.display = 'none';
+    bar.style.width = '0%';
+    showToast(`${files.length} factura(s) enviada(s) ✓`, true);
+  }, 600);
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result.split(',')[1]);
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ── AI Query ── */
+function setQuery(text) {
+  document.getElementById('queryInput').value = text;
+  document.getElementById('queryInput').focus();
+  adjustTextarea(document.getElementById('queryInput'));
+}
+
+async function sendQuery() {
+  const input = document.getElementById('queryInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const btn = document.getElementById('btnSend');
+  const resp = document.getElementById('queryResponse');
+  const rt = document.getElementById('responseText');
+
+  btn.disabled = true;
+  resp.classList.add('visible');
+  rt.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+
+  try {
+    const res = await fetch(N8N_QUERY_WEBHOOK, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({query: text})
+    });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    rt.innerHTML = escapeHtml(data.response || data.text || data.output || JSON.stringify(data));
+  } catch(e) {
+    rt.innerHTML = '<em style="color:var(--text-3)">El asistente no está disponible en este momento. Intenta desde Telegram.</em>';
+  }
+
+  btn.disabled = false;
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\n/g,'<br>');
+}
+
+/* ── Textarea auto-height ── */
+function setupTextarea() {
+  const ta = document.getElementById('queryInput');
+  ta.addEventListener('input', () => adjustTextarea(ta));
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendQuery(); }
+  });
+}
+
+function adjustTextarea(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+/* ── Toast ── */
+let toastTimer;
+function showToast(msg, success = true, error = false) {
+  const t = document.getElementById('toast');
+  const m = document.getElementById('toastMsg');
+  t.className = 'toast' + (error ? ' error' : success ? ' success' : '');
+  m.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+
+</body></html>
