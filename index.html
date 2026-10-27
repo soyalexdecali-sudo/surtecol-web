@@ -344,6 +344,85 @@ footer{
 .reveal.d3{transition-delay:.3s;}
 .reveal.visible{opacity:1;transform:none;}
 
+/* ── MisFinanzas section ─────────────────────────────── */
+.mf-section{
+  padding:80px 64px;max-width:1160px;margin:0 auto;
+}
+.mf-inner{
+  background:linear-gradient(135deg,var(--surface) 0%,#0B0F28 100%);
+  border:1px solid var(--border-2);border-radius:20px;
+  overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;
+  position:relative;
+}
+.mf-inner::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 80% at 110% 50%, rgba(61,255,197,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at -10% 50%, rgba(124,92,255,.06) 0%, transparent 70%);
+}
+.mf-copy{
+  padding:56px 48px;display:flex;flex-direction:column;gap:20px;
+  position:relative;z-index:1;
+}
+.mf-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);
+}
+.mf-eyebrow::before{
+  content:'';width:18px;height:2px;border-radius:2px;background:var(--accent);
+}
+.mf-copy h2{
+  font-size:clamp(24px,2.8vw,38px);font-weight:700;
+  letter-spacing:-.025em;line-height:1.1;
+  text-wrap:balance;
+}
+.mf-copy h2 span{color:var(--accent);}
+.mf-copy p{font-size:15px;color:var(--text-2);line-height:1.65;max-width:380px;}
+.mf-features{display:flex;flex-direction:column;gap:11px;margin-top:4px;}
+.mf-feat{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:14px;color:var(--text-2);line-height:1.4;
+}
+.mf-feat::before{
+  content:'→';color:var(--accent);font-weight:700;flex-shrink:0;margin-top:1px;
+}
+.btn-mf{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#07091A;
+  font-size:14px;font-weight:700;padding:13px 28px;
+  border-radius:var(--r-pill);align-self:flex-start;
+  transition:transform .2s,box-shadow .2s;
+  margin-top:8px;
+}
+.btn-mf:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(61,255,197,.28);}
+.mf-visual{
+  padding:40px 40px 40px 0;
+  display:flex;flex-direction:column;justify-content:center;gap:12px;
+  position:relative;z-index:1;
+}
+.mf-card{
+  background:rgba(7,9,26,.55);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid var(--border-2);border-radius:14px;
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.mf-card-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.mf-card-icon.mint{background:rgba(61,255,197,.12);}
+.mf-card-icon.coral{background:rgba(255,91,75,.12);}
+.mf-card-icon.purple{background:rgba(124,92,255,.12);}
+.mf-card-text{font-size:13px;font-weight:600;color:var(--text);}
+.mf-card-sub{font-size:11px;color:var(--text-3);margin-top:2px;}
+.mf-card-amount{
+  margin-left:auto;font-size:14px;font-weight:700;
+  font-variant-numeric:tabular-nums;color:var(--accent);
+}
+
 /* ── responsive ──────────────────────────────────────── */
 @media(max-width:900px){
   nav{padding:14px 20px;}
@@ -351,6 +430,11 @@ footer{
   .section{padding:64px 20px;}
   .svc-grid{grid-template-columns:1fr;}
   .steps-grid{grid-template-columns:1fr;}
+  .mf-section{padding:48px 20px;}
+  .mf-inner{grid-template-columns:1fr;}
+  .mf-copy{padding:36px 28px 0;}
+  .mf-visual{padding:24px 28px 36px;}
+  .btn-mf{align-self:stretch;justify-content:center;}
   .stats-inner{grid-template-columns:1fr 1fr;padding:0 20px;}
   .stat-cell{border-right:none;border-bottom:1px solid var(--border);padding:32px 16px;}
   .stat-cell:last-child{border-bottom:none;}
@@ -374,6 +458,7 @@ footer{
     <a href="#servicios">Servicios</a>
     <a href="#capacitaciones">Capacitaciones</a>
     <a href="#proceso">Proceso</a>
+    <a href="#misfinanzas" style="color:var(--accent);font-weight:700;">MisFinanzas ✦</a>
     <a href="#formulario" class="btn-nav">Contáctanos</a>
   </div>
 </nav>
@@ -559,6 +644,64 @@ footer{
         <div class="step-num">03</div>
         <h3>Acompañamiento</h3>
         <p>Te enseñamos a usarlo y quedamos disponibles. Sin dependencias eternas ni letra pequeña.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MISFINANZAS ─── -->
+<div id="misfinanzas">
+  <div class="mf-section reveal">
+    <div class="mf-inner">
+      <!-- Copy -->
+      <div class="mf-copy">
+        <span class="mf-eyebrow">Nuevo producto</span>
+        <h2>Controla tus gastos<br>con <span>MisFinanzas</span></h2>
+        <p>Sube fotos de tus facturas y recibos — nuestro sistema con IA las escanea, clasifica y organiza automáticamente. Consulta cualquier gasto con lenguaje natural.</p>
+        <div class="mf-features">
+          <div class="mf-feat">Escaneo de facturas con IA (GPT-4o Vision)</div>
+          <div class="mf-feat">Consultas en lenguaje natural: "¿Cuánto gasté en servicios este mes?"</div>
+          <div class="mf-feat">Dashboard en tiempo real, sin Excel, sin hojas de cálculo</div>
+          <div class="mf-feat">Integración con Gmail y Telegram</div>
+        </div>
+        <a href="misfinanzas.html" class="btn-mf">
+          Abrir MisFinanzas
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <!-- Visual mock -->
+      <div class="mf-visual">
+        <div class="mf-card">
+          <div class="mf-card-icon mint">🧾</div>
+          <div>
+            <div class="mf-card-text">Éxito — Supermercado</div>
+            <div class="mf-card-sub">Hoy · Alimentación</div>
+          </div>
+          <div class="mf-card-amount">$184.500</div>
+        </div>
+        <div class="mf-card">
+          <div class="mf-card-icon purple">💡</div>
+          <div>
+            <div class="mf-card-text">EPM — Servicio público</div>
+            <div class="mf-card-sub">Oct 15 · Servicios</div>
+          </div>
+          <div class="mf-card-amount">$132.000</div>
+        </div>
+        <div class="mf-card">
+          <div class="mf-card-icon coral">🚗</div>
+          <div>
+            <div class="mf-card-text">Uber — Transporte</div>
+            <div class="mf-card-sub">Oct 22 · Transporte</div>
+          </div>
+          <div class="mf-card-amount">$28.900</div>
+        </div>
+        <div class="mf-card" style="border-color:rgba(61,255,197,.25);background:rgba(61,255,197,.04);">
+          <div class="mf-card-icon mint">🤖</div>
+          <div>
+            <div class="mf-card-text" style="color:var(--accent);">"¿Cuánto gasté en comida?"</div>
+            <div class="mf-card-sub">IA responde en segundos</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
